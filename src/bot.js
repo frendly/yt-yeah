@@ -1,36 +1,45 @@
-require('dotenv').config();
 const { Telegraf } = require('telegraf');
 const { link } = require('telegraf/format');
-const { getYoutubeLink } = require('./index');
+const { getYoutubeLink } = require('./utils/get-youtube-link');
+const { isYouTubeUrl } = require('./utils/is-youtube-url');
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+require('dotenv').config();
 
-function isYouTubeUrl(message) {
-  const urlRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(\&t=([a-zA-Z0-9_-]+))?$/;
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)$/;
-
-  return urlRegex.test(message.text) || youtubeRegex.test(message.text);
-}
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.use(async (ctx, next) => {
   if (isYouTubeUrl(ctx.message)) {
-    console.log('ctx.message', ctx.message);
-    
-    // await ctx.reply('Detected YouTube link!');
+    await ctx.reply('Получаю видео');
+
     const url = await getYoutubeLink(ctx.message.text);
     const formattedLink = link('video', url)
-    console.log('url', url);
     await ctx.reply(formattedLink);
+  } else {
+    await ctx.reply('Молодой человек! Я ПОНИМАЮ только ссылки на ютуб');
   }
   next();
 });
 
 bot.start((ctx) => ctx.reply('Welcome'));
+
 bot.on('message', async (ctx) => {
-  // await ctx.reply(`You said: ${ctx.message.text}`);
+  await ctx.reply(`You said: ${ctx.message.text}`);
 });
-bot.launch();
+
+// bot.launch();
+
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+// AWS event handler syntax (https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html)
+module.exports.handler = async event => {
+  try {
+    await bot.handleUpdate(JSON.parse(event.body || '{}' ))
+    return { statusCode: 200, body: "" }
+  } catch (e) {
+    console.error("error in handler:", e)
+    return { statusCode: 400, body: "This endpoint is meant for bot and telegram communication" }
+  }
+}

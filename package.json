@@ -1,21 +1,18 @@
 {
   "name": "yt-yeah",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "functions/bot/bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/bot.js",
+    "dev": "netlify dev --live --no-open",
+    "debug": "npm run dev -- --debug"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frendly/yt-yeah.git"
   },
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/frendly/yt-yeah/issues"
-  },
-  "homepage": "https://github.com/frendly/yt-yeah#readme",
-  "description": "",
   "dependencies": {
     "telegraf": "^4.16.3",
     "youtube-dl-exec": "^3.0.10"
