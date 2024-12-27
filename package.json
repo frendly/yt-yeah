@@ -15,5 +15,8 @@
     "url": "https://github.com/frendly/yt-yeah/issues"
   },
   "homepage": "https://github.com/frendly/yt-yeah#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "youtube-dl-exec": "^3.0.10"
+  }
 }
