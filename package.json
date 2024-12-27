@@ -17,6 +17,10 @@
   "homepage": "https://github.com/frendly/yt-yeah#readme",
   "description": "",
   "dependencies": {
+    "telegraf": "^4.16.3",
     "youtube-dl-exec": "^3.0.10"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7"
   }
 }
