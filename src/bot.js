@@ -1,5 +1,4 @@
 const { Telegraf } = require('telegraf');
-const { link } = require('telegraf/format');
 const { getYoutubeLink } = require('./utils/get-youtube-link');
 const { isYouTubeUrl } = require('./utils/is-youtube-url');
 
@@ -12,19 +11,16 @@ bot.use(async (ctx, next) => {
     await ctx.reply('Получаю видео');
 
     const url = await getYoutubeLink(ctx.message.text);
-    const formattedLink = link('video', url)
-    await ctx.reply(formattedLink);
+    await ctx.replyWithVideo({url: url});
   } else {
     await ctx.reply('Молодой человек! Я ПОНИМАЮ только ссылки на ютуб');
+    await ctx.reply(`А вы говорите: ${ctx.message.text} и бла-бла-бла`);
   }
   next();
 });
 
 bot.start((ctx) => ctx.reply('Welcome'));
 
-bot.on('message', async (ctx) => {
-  await ctx.reply(`You said: ${ctx.message.text}`);
-});
 
 // bot.launch();
 
